@@ -1,0 +1,12 @@
+kaggle
+numpy
+pandas
+pyarrow
+matplotlib
+seaborn
+sklearn
+awscli
+boto3
+s3fs
+awswrangler
+ipykernal
