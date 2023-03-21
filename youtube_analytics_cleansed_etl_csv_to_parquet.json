@@ -1,0 +1,311 @@
+{
+  "jobConfig": {
+    "name": "youtube-analytics-cleansed-etl-csv-to-parquet",
+    "description": "ETL to transform the schema of the raw table to the schema of the cleansed tables.",
+    "role": "arn:aws:iam::622454066304:role/service-role/AWSGlueServiceRole",
+    "command": "glueetl",
+    "version": "3.0",
+    "workerType": "G.1X",
+    "numberOfWorkers": 3,
+    "maxCapacity": 3,
+    "maxRetries": 0,
+    "maxConcurrentRuns": 1,
+    "security": "none",
+    "scriptName": "youtube-analytics-cleansed-etl-csv-to-parquet.py",
+    "scriptLocation": "s3://aws-glue-assets-622454066304-us-east-1/scripts/",
+    "language": "python-3",
+    "jobParameters": [],
+    "tags": [],
+    "jobMode": "VISUAL_MODE",
+    "createdOn": "2023-03-19T11:54:42.266Z",
+    "developerMode": false,
+    "connectionsList": [],
+    "temporaryDirectory": "s3://aws-glue-assets-622454066304-us-east-1/temporary/",
+    "logging": true,
+    "glueHiveMetastore": true,
+    "etlAutoTuning": true,
+    "metrics": true,
+    "spark": true,
+    "bookmark": "job-bookmark-disable",
+    "sparkPath": "s3://aws-glue-assets-622454066304-us-east-1/sparkHistoryLogs/",
+    "flexExecution": false,
+    "minFlexWorkers": null,
+    "timeout": "6",
+    "pythonPath": null
+  },
+  "dag": {
+    "node-1": {
+      "database": "youtube-analytics-raw-metadata",
+      "table": "raw_statistics",
+      "runtimeParameters": [],
+      "isCatalog": true,
+      "name": "Ingest Data From Source",
+      "classification": "DataSource",
+      "type": "S3",
+      "inputs": [],
+      "generatedNodeName": "IngestDataFromSource_node1",
+      "codeGenVersion": 2,
+      "outputSchemas": [],
+      "partitionPredicate": "region in ('ca','gb','us')"
+    },
+    "node-2": {
+      "classification": "Transform",
+      "type": "ApplyMapping",
+      "inputs": [
+        "node-1679226163137"
+      ],
+      "name": "ApplyMapping",
+      "mapping": [
+        {
+          "toKey": "video_id",
+          "fromPath": [
+            "video_id"
+          ],
+          "toType": "string",
+          "fromType": "string",
+          "dropped": false
+        },
+        {
+          "toKey": "trending_date",
+          "fromPath": [
+            "trending_date"
+          ],
+          "toType": "string",
+          "fromType": "string",
+          "dropped": false
+        },
+        {
+          "toKey": "title",
+          "fromPath": [
+            "title"
+          ],
+          "toType": "string",
+          "fromType": "string",
+          "dropped": false
+        },
+        {
+          "toKey": "channel_title",
+          "fromPath": [
+            "channel_title"
+          ],
+          "toType": "string",
+          "fromType": "string",
+          "dropped": false
+        },
+        {
+          "toKey": "category_id",
+          "fromPath": [
+            "category_id"
+          ],
+          "toType": "bigint",
+          "fromType": "long",
+          "dropped": false
+        },
+        {
+          "toKey": "publish_time",
+          "fromPath": [
+            "publish_time"
+          ],
+          "toType": "timestamp",
+          "fromType": "string",
+          "dropped": false
+        },
+        {
+          "toKey": "tags",
+          "fromPath": [
+            "tags"
+          ],
+          "toType": "string",
+          "fromType": "string",
+          "dropped": false
+        },
+        {
+          "toKey": "views",
+          "fromPath": [
+            "views"
+          ],
+          "toType": "bigint",
+          "fromType": "long",
+          "dropped": false
+        },
+        {
+          "toKey": "likes",
+          "fromPath": [
+            "likes"
+          ],
+          "toType": "bigint",
+          "fromType": "long",
+          "dropped": false
+        },
+        {
+          "toKey": "dislikes",
+          "fromPath": [
+            "dislikes"
+          ],
+          "toType": "bigint",
+          "fromType": "long",
+          "dropped": false
+        },
+        {
+          "toKey": "comment_count",
+          "fromPath": [
+            "comment_count"
+          ],
+          "toType": "bigint",
+          "fromType": "long",
+          "dropped": false
+        },
+        {
+          "toKey": "thumbnail_link",
+          "fromPath": [
+            "thumbnail_link"
+          ],
+          "toType": "string",
+          "fromType": "string",
+          "dropped": false
+        },
+        {
+          "toKey": "comments_disabled",
+          "fromPath": [
+            "comments_disabled"
+          ],
+          "toType": "boolean",
+          "fromType": "boolean",
+          "dropped": false
+        },
+        {
+          "toKey": "ratings_disabled",
+          "fromPath": [
+            "ratings_disabled"
+          ],
+          "toType": "boolean",
+          "fromType": "boolean",
+          "dropped": false
+        },
+        {
+          "toKey": "video_error_or_removed",
+          "fromPath": [
+            "video_error_or_removed"
+          ],
+          "toType": "boolean",
+          "fromType": "boolean",
+          "dropped": false
+        },
+        {
+          "toKey": "description",
+          "fromPath": [
+            "description"
+          ],
+          "toType": "string",
+          "fromType": "string",
+          "dropped": false
+        },
+        {
+          "toKey": "region",
+          "fromPath": [
+            "region"
+          ],
+          "toType": "string",
+          "fromType": "string",
+          "dropped": false
+        }
+      ],
+      "generatedNodeName": "ApplyMapping_node2",
+      "codeGenVersion": 2
+    },
+    "node-3": {
+      "classification": "DataSink",
+      "type": "S3",
+      "inputs": [
+        "node-1679226098912"
+      ],
+      "name": "Output Location",
+      "format": "glueparquet",
+      "compression": "snappy",
+      "path": "s3://youtube-analytics-cleansed-us-east-1-dev/raw_statistics_cleansed/",
+      "partitionKeys": [
+        "region"
+      ],
+      "updateCatalogOptions": "none",
+      "schemaChangePolicy": {
+        "enableUpdateCatalog": false
+      },
+      "additionalOptions": {},
+      "generatedNodeName": "OutputLocation_node3",
+      "codeGenVersion": 2
+    },
+    "node-1679226098912": {
+      "classification": "Transform",
+      "type": "DropNullFields",
+      "name": "Drop Null Fields",
+      "inputs": [
+        "node-2"
+      ],
+      "nullCheckBoxList": {
+        "isEmpty": true,
+        "isNegOne": true,
+        "isNull": false,
+        "isNullString": true
+      },
+      "nullTextList": [],
+      "generatedNodeName": "DropNullFields_node1679226098912",
+      "codeGenVersion": 2
+    },
+    "node-1679226163137": {
+      "classification": "Transform",
+      "type": "Filter",
+      "name": "Filter",
+      "inputs": [
+        "node-1"
+      ],
+      "logicalOperator": "OR",
+      "filters": [
+        {
+          "operation": "REGEX",
+          "negated": false,
+          "values": [
+            {
+              "type": "CONSTANT",
+              "value": "ca"
+            },
+            {
+              "type": "COLUMNEXTRACTED",
+              "value": "region"
+            }
+          ]
+        },
+        {
+          "operation": "REGEX",
+          "negated": false,
+          "values": [
+            {
+              "type": "CONSTANT",
+              "value": "gb"
+            },
+            {
+              "type": "COLUMNEXTRACTED",
+              "value": "region"
+            }
+          ]
+        },
+        {
+          "operation": "REGEX",
+          "negated": false,
+          "values": [
+            {
+              "type": "CONSTANT",
+              "value": "us"
+            },
+            {
+              "type": "COLUMNEXTRACTED",
+              "value": "region"
+            }
+          ]
+        }
+      ],
+      "generatedNodeName": "Filter_node1679226163137",
+      "codeGenVersion": 2
+    }
+  },
+  "hasBeenSaved": false
+}
