@@ -47,6 +47,7 @@ __file__ `dataTransfer.sh`
 ### Datalake Architecture
 ##### Naming Conventions
 Project-based/[raw, curated]/region/environment type [dev, production]/data partitioning < source/type/ region>
+
   `ex: data_engineering_youtube_analytics/raw/us-east-1/dev/youtube/raw_statistics/region=ca/`
   
 ##### Layers
@@ -79,9 +80,9 @@ Project-based/[raw, curated]/region/environment type [dev, production]/data part
       5. Save the output to the cleansed database
    
   __file__ `youtube_analytics_cleansed_etl_csv_to_parquet.py`
-      
-![youtubeAnalytics3](https://user-images.githubusercontent.com/80867381/227110079-a432c11c-cc6b-4c85-9b5a-6732b2115d6c.JPG)
+
 ![youtubeAnalytics2](https://user-images.githubusercontent.com/80867381/227110077-1d514939-3848-4f61-ac6b-ad0d5316ba0d.JPG)
+![youtubeAnalytics3](https://user-images.githubusercontent.com/80867381/227110079-a432c11c-cc6b-4c85-9b5a-6732b2115d6c.JPG)
 
 3. Join Different Tables to Build the analytical Table
   * Build a pyspark job to build the analytical table and load it to the analytical database 
