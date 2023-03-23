@@ -81,7 +81,7 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args["JOB_NAME"], args)
 
-# Script generated for node Ingest Data From Source
+# Script for node Ingest Data From Source
 IngestDataFromSource_node1 = glueContext.create_dynamic_frame.from_catalog(
     database="youtube-analytics-raw",
     push_down_predicate="region in ('ca','gb','us')",
@@ -89,8 +89,8 @@ IngestDataFromSource_node1 = glueContext.create_dynamic_frame.from_catalog(
     transformation_ctx="IngestDataFromSource_node1",
 )
 
-# Script generated for node Filter
-Filter_node1679226163137 = Filter.apply(
+# Script for node Filter
+Filter_node = Filter.apply(
     frame=IngestDataFromSource_node1,
     f=lambda row: (
         bool(re.match("ca", row["region"]))
@@ -102,7 +102,7 @@ Filter_node1679226163137 = Filter.apply(
 
 # Script generated for node ApplyMapping
 ApplyMapping_node2 = ApplyMapping.apply(
-    frame=Filter_node1679226163137,
+    frame=Filter_node,
     mappings=[
         ("video_id", "string", "video_id", "string"),
         ("trending_date", "string", "trending_date", "string"),
@@ -125,8 +125,8 @@ ApplyMapping_node2 = ApplyMapping.apply(
     transformation_ctx="ApplyMapping_node2",
 )
 
-# Script generated for node Drop Null Fields
-DropNullFields_node1679226098912 = drop_nulls(
+# Script for node Drop Null Fields
+DropNullFields_node = drop_nulls(
     glueContext,
     frame=ApplyMapping_node2,
     nullStringSet={"", "null"},
@@ -136,7 +136,7 @@ DropNullFields_node1679226098912 = drop_nulls(
 
 # Script generated for node Output Location
 OutputLocation_node3 = glueContext.write_dynamic_frame.from_options(
-    frame=DropNullFields_node1679226098912,
+    frame=DropNullFields_node,
     connection_type="s3",
     format="glueparquet",
     connection_options={

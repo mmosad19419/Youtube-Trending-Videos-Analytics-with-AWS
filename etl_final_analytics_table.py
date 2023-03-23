@@ -12,14 +12,14 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args["analytics_etl"], args)
 
-# Script generated for node raw_statistics_cleansed_reference_data_db_table
+# Script for node raw_statistics_cleansed_reference_data_db_table
 raw_statistics_cleansed_reference_data_db_table = glueContext.create_dynamic_frame.from_catalog(
     database="youtube-analytics-cleansed",
     table_name="raw_statistics_cleansed_reference_data",
     transformation_ctx="raw_statistics_cleansed_reference_data_db_table_node1679239308673",
 )
 
-# Script generated for node raw_statistics_cleansed_db_table
+# Script for node raw_statistics_cleansed_db_table
 raw_statistics_cleansed_db_table = (
     glueContext.create_dynamic_frame.from_catalog(
         database="youtube-analytics-cleansed",
@@ -28,8 +28,8 @@ raw_statistics_cleansed_db_table = (
     )
 )
 
-# Script generated for node Join
-Join_node1679239438319 = Join.apply(
+# Script for node Join
+Join_node = Join.apply(
     frame1=raw_statistics_cleansed_reference_data_db_table,
     frame2=raw_statistics_cleansed_db_table,
     keys1=["id"],
@@ -37,9 +37,9 @@ Join_node1679239438319 = Join.apply(
     transformation_ctx="Join_node1679239438319",
 )
 
-# Script generated for node ApplyMapping
+# Script for node ApplyMapping
 ApplyMapping_node2 = ApplyMapping.apply(
-    frame=Join_node1679239438319,
+    frame=Join_node,
     mappings=[
         ("kind", "string", "kind", "string"),
         ("etag", "string", "etag", "string"),
